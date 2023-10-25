@@ -1,7 +1,5 @@
 import asyncio
 import logging
-import os
-from pathlib import Path
 import sys
 
 from aiogram import Bot, Dispatcher, F, Router, html
@@ -9,7 +7,8 @@ from aiogram.enums import ParseMode
 from aiogram.filters import Command, CommandStart
 from aiogram.types import Message
 
-from config import config
+from bot.config import config
+from bot.services.server import get_ssh_host_and_port
 
 
 main_router = Router()
@@ -30,13 +29,14 @@ async def command_start(message: Message) -> None:
 @main_router.message(Command("get_ssh"))
 async def cancel_handler(message: Message) -> None:
     ssh_user = config.server.ssh_user
-    server_host = "loc"
-    server_port = "1111"
 
-    ssh_connet_command = html.code(f"ssh {ssh_user}@{server_host} -p {server_port}")
+    host, port = await get_ssh_host_and_port()
+
+    ssh_connect_command = html.code(f"ssh {ssh_user}@{host} -p {port}")
+    ssh_url = f"ssh://{ssh_user}@{host}:{port}"
 
     await message.answer(
-        f"Developer server runs on: {server_host}:{server_port}.\n{ssh_connet_command}",
+        f"Developer server runs on: {ssh_url}.\n\n{ssh_connect_command}",
     )
 
 

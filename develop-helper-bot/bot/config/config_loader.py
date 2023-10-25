@@ -10,7 +10,13 @@ class Bot:
 @dataclass
 class Server:
     ssh_user: str
-    whitelisted_users: list[str]
+    host: str
+    port: int
+    whitelisted_users: list[int]
+
+    @property
+    def url(self):
+        return f"{self.host}:{self.port}"
 
 
 @dataclass
@@ -27,6 +33,8 @@ def load_config():
         bot=Bot(token=env.str("BOT_TOKEN")),
         server=Server(
             ssh_user=env.str("SSH_USER"),
+            host=env.str("SERVER_HOST"),
+            port=env.str("SERVER_PORT"),
             whitelisted_users=env.list("WHITELISTED_USERS", subcast=int),
         ),
     )
