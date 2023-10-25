@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "develop-helper-bot"
+version = "0.1.0"
+description = ""
+authors = ["Blackgolyb <andrejomelnickij@gmail.com>"]
+readme = "README.md"
+packages = [{ include = "bot" }]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiogram = "^3.1.1"
+envparse = "^0.2.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
