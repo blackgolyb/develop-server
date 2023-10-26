@@ -10,6 +10,7 @@ packages = [{ include = "bot" }]
 python = "^3.10"
 aiogram = "^3.1.1"
 envparse = "^0.2.0"
+aiogram-forms = "^1.1.1"
 
 
 [build-system]
