@@ -1,4 +1,7 @@
 import ngrok
+from ngrok import Listener
+import json
+
 
 from src.services.singleton import SingletonMeta
 from config import config
@@ -9,23 +12,42 @@ class NgrokSSHConnector(metaclass=SingletonMeta):
 
     def __init__(self):
         self.ssh_client = None
-        self.listener = None
+        self.listener_id: str | None = None
 
-    @property
-    def url(self):
-        return self.listener.url().replace("tcp://", "")
+    async def listener(self) -> Listener | None:
+        listeners: list[Listener] = await ngrok.get_listeners()
 
-    @property
-    def host(self):
-        return self.url.split(":")[0]
+        for listener in listeners:
+            if listener.id() == self.listener_id:
+                return listener
 
-    @property
-    def port(self):
-        return self.url.split(":")[1]
+        return None
+
+    async def url(self):
+        listener = await self.listener()
+        return listener.url().replace("tcp://", "")
+
+    async def host(self):
+        url = await self.url()
+        return url.split(":")[0]
+
+    async def port(self):
+        url = await self.url()
+        return url.split(":")[1]
 
     async def create_tunnel(self):
-        if self.listener is not None:
+        prev_listener = await self.listener()
+        if prev_listener is not None:
             return
-        self.listener = await ngrok.connect(
-            self.SSH_PORT, "tcp", authtoken=config.ngrok.auth_token
+
+        metadata = {
+            "proto": "tcp",
+            "port": self.SSH_PORT,
+        }
+        listener = await ngrok.connect(
+            self.SSH_PORT,
+            "tcp",
+            authtoken=config.ngrok.auth_token,
+            metadata=json.dumps(metadata),
         )
+        self.listener_id = listener.id()
