@@ -1,0 +1,9 @@
+#!/bin/bash
+sudo systemctl stop develop_server.bot.service
+sudo systemctl disable develop_server.bot.service
+  
+sudo systemctl stop develop_server.server.service
+sudo systemctl disable develop_server.server.service
+
+sudo rm -rf /etc/systemd/system/develop_server.bot.service
+sudo rm -rf /etc/systemd/system/develop_server.server.service
