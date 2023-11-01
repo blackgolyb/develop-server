@@ -6,6 +6,7 @@ from aiogram import Bot, Dispatcher, F, Router, html
 from aiogram.enums import ParseMode
 from aiogram.filters import Command, CommandStart
 from aiogram.filters.callback_data import CallbackData
+from aiogram.exceptions import TelegramNetworkError
 from aiogram.types import (
     Message,
     InlineKeyboardMarkup,
@@ -18,7 +19,7 @@ from aiogram_forms.forms import Form, fields, FormsManager
 from aiogram_forms.errors import ValidationError
 
 from bot.config import config
-from bot.services.utils import batch
+from bot.services.utils import batch, try_to_run
 from bot.services.server import (
     get_ssh_host_and_port,
     start_develop_server,
@@ -213,7 +214,12 @@ async def main():
 
     dp.include_router(main_router)
 
-    await dp.start_polling(bot)
+    await try_to_run(
+        coroutine=dp.start_polling(bot),
+        attempts=config.general.attempts,
+        sleep=config.general.attempt_sleep,
+        exception=TelegramNetworkError,
+    )
 
 
 if __name__ == "__main__":

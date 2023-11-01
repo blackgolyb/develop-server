@@ -14,10 +14,17 @@ class Ngrok:
 
 
 @dataclass
+class General:
+    attempts: int = 100
+    attempt_sleep: int = 3
+    debug: bool = True
+
+
+@dataclass
 class Config:
     server: Server
     ngrok: Ngrok
-    debug: bool = True
+    general: General
 
 
 def load_config() -> Config:
@@ -32,5 +39,7 @@ def load_config() -> Config:
         ngrok=Ngrok(
             auth_token=env.str("NGROK_AUTH_TOKEN"),
         ),
-        debug=env.bool("DEBUG", default=True),
+        general=General(
+            debug=env.bool("DEBUG", default=True),
+        ),
     )

@@ -20,9 +20,17 @@ class Server:
 
 
 @dataclass
+class General:
+    attempts: int = 100
+    attempt_sleep: int = 3
+    debug: bool = True
+
+
+@dataclass
 class Config:
     bot: Bot
     server: Server
+    general: General
 
 
 def load_config():
@@ -36,5 +44,8 @@ def load_config():
             host=env.str("SERVER_HOST"),
             port=env.str("SERVER_PORT"),
             whitelisted_users=env.list("WHITELISTED_USERS", subcast=int),
+        ),
+        general=General(
+            debug=env.bool("DEBUG", default=True),
         ),
     )

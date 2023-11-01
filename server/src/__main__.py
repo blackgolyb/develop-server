@@ -7,10 +7,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.api.control import router as control_router
 from src.config import config
 from src.services.ngrok import NgrokSSHConnector
+from src.services.utils import try_to_run
 
 
 def configure_fastapi():
-    app = FastAPI(title="develop server ", debug=config.debug)
+    app = FastAPI(title="develop server ", debug=config.general.debug)
 
     app.include_router(control_router)
 
@@ -45,7 +46,12 @@ def configure_uvicorn(fasapi_app):
 
 async def configure_ngrok():
     ngrok = NgrokSSHConnector()
-    await ngrok.create_tunnel()
+    await try_to_run(
+        coroutine=ngrok.create_tunnel(),
+        attempts=config.general.attempts,
+        sleep=config.general.attempt_sleep,
+        exception=Exception,
+    )
 
 
 async def main():
