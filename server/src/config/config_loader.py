@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from envparse import Env
+from functools import lru_cache
 
 
 @dataclass
@@ -26,7 +27,7 @@ class Config:
     ngrok: Ngrok
     general: General
 
-
+@lru_cache
 def load_config() -> Config:
     env = Env()
     env.read_envfile()

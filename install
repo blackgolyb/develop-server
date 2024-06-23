@@ -1,50 +1,50 @@
 #!/bin/bash
 
-poetry config virtualenvs.in-project true
-
 username=$USER
 bot_folder=$PWD/develop-helper-bot
 server_folder=$PWD/server
 
 cd $bot_folder
-poetry install
+python3 -m venv venv
+python3 -m pip install .
 cd ..
 
 cd $server_folder
-poetry install
+python -m venv venv
+python3 -m pip install .
 cd ..
 
-echo "[Unit]
-Description=develop_server bot
-After=multi-user.target
+# echo "[Unit]
+# Description=develop_server bot
+# After=multi-user.target
 
-[Service]
-Type=simple
-User=$username
-ExecStart=$server_folder/.venv/bin/python $server_folder/src/__main__.py
+# [Service]
+# Type=simple
+# User=$username
+# ExecStart=$server_folder/.venv/bin/python $server_folder/src/__main__.py
 
-[Install]
-WantedBy=multi-user.target
-" | sudo tee /etc/systemd/system/develop_server.server.service
+# [Install]
+# WantedBy=multi-user.target
+# " | sudo tee /etc/systemd/system/develop_server.server.service
 
-echo "[Unit]
-Description=develop_server server
-After=multi-user.target
+# echo "[Unit]
+# Description=develop_server server
+# After=multi-user.target
 
-[Service]
-Type=simple
-User=$username
-ExecStart=$bot_folder/.venv/bin/python $bot_folder/bot/__main__.py
+# [Service]
+# Type=simple
+# User=$username
+# ExecStart=$bot_folder/.venv/bin/python $bot_folder/bot/__main__.py
 
-[Install]
-WantedBy=multi-user.target
-" | sudo tee /etc/systemd/system/develop_server.bot.service
+# [Install]
+# WantedBy=multi-user.target
+# " | sudo tee /etc/systemd/system/develop_server.bot.service
 
 
-sudo systemctl daemon-reload    
+# sudo systemctl daemon-reload    
 
-sudo systemctl enable develop_server.bot.service
-sudo systemctl start develop_server.bot.service
+# sudo systemctl enable develop_server.bot.service
+# sudo systemctl start develop_server.bot.service
   
-sudo systemctl enable develop_server.server.service
-sudo systemctl start develop_server.server.service
+# sudo systemctl enable develop_server.server.service
+# sudo systemctl start develop_server.server.service

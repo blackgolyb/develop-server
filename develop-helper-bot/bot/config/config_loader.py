@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from envparse import Env
+from functools import lru_cache
 
 
 @dataclass
@@ -32,7 +33,7 @@ class Config:
     server: Server
     general: General
 
-
+@lru_cache
 def load_config():
     env = Env()
     env.read_envfile()
