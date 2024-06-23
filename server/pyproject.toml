@@ -7,8 +7,8 @@ packages = [{ include = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-ngrok = "^0.12.0"
-fastapi = "^0.104.0"
+ngrok = "^0.12.1"
+fastapi = "^0.104.1"
 envparse = "^0.2.0"
 uvicorn = "^0.23.2"
 
