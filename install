@@ -4,18 +4,19 @@ username=$USER
 bot_folder=$PWD/develop-helper-bot
 server_folder=$PWD/server
 
+install_dep () {
+    python3 -m venv .venv
+    source ./.venv/bin/activate
+    python3 -m pip install .
+    deactivate
+}
+
 cd $bot_folder
-python3 -m venv venv
-source ./venv/bin/activate
-python3 -m pip install .
-deactivate
+install_dep
 cd ..
 
 cd $server_folder
-python -m venv venv
-source ./venv/bin/activate
-python3 -m pip install .
-deactivate
+install_dep
 cd ..
 
 echo "[Unit]
