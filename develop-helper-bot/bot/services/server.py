@@ -9,10 +9,10 @@ class FailedToGetSSHURLException(RuntimeError):
 def aiohttp_session_provider(func):
     async def wrap(*args, **kwargs):
         if "session" in kwargs:
-            return func(*args, **kwargs)
+            return await func(*args, **kwargs)
         
         async with aiohttp.ClientSession() as session:
-            return func(*args, **kwargs, session=session)
+            return await func(*args, **kwargs, session=session)
         
     return wrap
 
