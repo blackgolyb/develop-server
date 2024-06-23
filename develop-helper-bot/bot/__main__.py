@@ -3,6 +3,7 @@ import logging
 import sys
 
 from aiogram import Bot, Dispatcher, F, Router, html
+from aiogram.client.default import DefaultBotProperties
 from aiogram.enums import ParseMode
 from aiogram.filters import Command, CommandStart
 from aiogram.filters.callback_data import CallbackData
@@ -207,7 +208,8 @@ async def close_tunnel_callback_handler(
 
 
 async def main():
-    bot = Bot(token=config.bot.token, parse_mode=ParseMode.HTML)
+    properties = DefaultBotProperties(parse_mode=ParseMode.HTML)
+    bot = Bot(token=config.bot.token, default=properties)
     dp = Dispatcher()
 
     dispatcher.attach(dp)
