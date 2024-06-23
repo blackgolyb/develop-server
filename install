@@ -6,12 +6,16 @@ server_folder=$PWD/server
 
 cd $bot_folder
 python3 -m venv venv
+source ./venv/bin/activate
 python3 -m pip install .
+deactivate
 cd ..
 
 cd $server_folder
 python -m venv venv
+source ./venv/bin/activate
 python3 -m pip install .
+deactivate
 cd ..
 
 # echo "[Unit]
